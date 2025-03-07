@@ -1,4 +1,3 @@
-
 import os
 import logging
 from openai import OpenAI
@@ -28,7 +27,7 @@ def generate_questions(story_summary):
         """
 
         response = client.chat.completions.create(
-            model="gpt-4",
+            model="gpt-3.5-turbo",
             messages=[
                 {"role": "system", "content": "You are a helpful assistant."},
                 {"role": "user", "content": prompt}
@@ -77,7 +76,7 @@ def generate_story(story_summary, responses):
         """
 
         response = client.chat.completions.create(
-            model="gpt-4",
+            model="gpt-3.5-turbo",
             messages=[
                 {"role": "system", "content": "You are a helpful assistant."},
                 {"role": "user", "content": prompt}
