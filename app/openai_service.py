@@ -1,12 +1,10 @@
-import openai
 import os
 import logging
+from openai import OpenAI
 
-# Set up logging for Render (optional but useful)
 logging.basicConfig(level=logging.INFO)
 
-# Get the API key from environment variable
-openai.api_key = os.getenv('OPENAI_API_KEY')
+client = OpenAI()
 
 def generate_questions(story_summary):
     try:
@@ -26,7 +24,7 @@ def generate_questions(story_summary):
         Output only the 5 questions, each on a new line.
         """
 
-        response = openai.ChatCompletion.create(
+        response = client.chat.completions.create(
             model="gpt-4",
             messages=[
                 {"role": "system", "content": "You are a helpful assistant."},
@@ -35,11 +33,11 @@ def generate_questions(story_summary):
             max_tokens=500
         )
 
-        content = response['choices'][0]['message']['content'].strip()
+        content = response.choices[0].message.content.strip()
 
         # Basic safety processing to split into 5 questions.
         questions = content.split('\n')
-        questions = [q.strip() for q in questions if q.strip()]  # Clean empty lines
+        questions = [q.strip() for q in questions if q.strip()]
 
         if len(questions) != 5:
             raise ValueError(f"Expected 5 questions, got {len(questions)} - Response content: {content}")
@@ -55,41 +53,3 @@ def generate_questions(story_summary):
             "Thank you for your patience.",
             "We look forward to hearing your story!"
         ]
-
-def generate_story(story_summary, responses):
-    try:
-        responses_text = "\n".join([f"{i+1}. {response}" for i, response in enumerate(responses)])
-
-        prompt = f"""
-        Please combine the following story summary and participant responses into a complete personal story. Use the following structure:
-
-        1. Initial Challenge or Need
-        2. Demonstration of Faith
-        3. Unexpected or Divine Preparation
-        4. Miraculous Resolution
-        5. Lasting Impact
-
-        Story Summary: 
-        {story_summary}
-
-        Participant Responses:
-        {responses_text}
-
-        Create a warm, personal, narrative-style story with a reflective tone. Use the participant's own voice where possible.
-        """
-
-        response = openai.ChatCompletion.create(
-            model="gpt-4",
-            messages=[
-                {"role": "system", "content": "You are a helpful assistant."},
-                {"role": "user", "content": prompt}
-            ],
-            max_tokens=1500
-        )
-
-        return response['choices'][0]['message']['content'].strip()
-
-    except Exception as e:
-        logging.error(f"Error generating story from OpenAI: {e}", exc_info=True)
-        return "We're sorry — we encountered an error while creating your story. Please contact the project team for assistance."
-
