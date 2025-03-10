@@ -1,7 +1,9 @@
 from flask import Blueprint, request, jsonify
+from flask_cors import CORS  # ✅ Import CORS
 from app.openai_service import generate_questions, generate_story
 
 bp = Blueprint('routes', __name__)
+CORS(bp)  # ✅ Enable CORS for all routes
 
 @bp.route('/generate-questions', methods=['POST'])
 def generate_questions_endpoint():

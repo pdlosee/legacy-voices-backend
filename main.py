@@ -1,6 +1,8 @@
 from app import create_app
+from flask_cors import CORS  # ✅ Import CORS
 
 app = create_app()
+CORS(app)  # ✅ Enable CORS globally
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=10000)
+    app.run(debug=True)
