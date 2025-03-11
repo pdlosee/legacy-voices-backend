@@ -2,7 +2,7 @@ import os
 import logging
 from openai import OpenAI
 
-# Set up logging for Render (optional but useful)
+# Set up logging for debugging
 logging.basicConfig(level=logging.INFO)
 
 # Initialize OpenAI client
@@ -11,25 +11,25 @@ client = OpenAI(api_key=os.getenv('OPENAI_API_KEY'))
 def generate_questions(story_summary):
     try:
         prompt = f"""
-        Please read the following story summary provided by an elderly participant.
-
+        You are an LDS biographical interviewer helping users tell their life stories through faith-centered reflection. 
+        Read the following story summary and generate 5 follow-up questions following this structure:
+        
+        1. Initial Challenge or Need
+        2. Demonstration of Faith
+        3. Unexpected or Divine Preparation
+        4. Miraculous Resolution
+        5. Lasting Impact
+        
         Story Summary: 
         {story_summary}
-
-        Based on this story, generate 5 personalized follow-up questions. These questions should help the participant describe:
-        1. Their initial feelings or motivations.
-        2. The challenges they faced.
-        3. Any divine or unexpected help they received.
-        4. How the situation was resolved.
-        5. What they learned from the experience.
-
-        Output only the 5 questions, each on a new line.
+        
+        Please generate exactly 5 questions that help deepen the user's reflection and faith-based insights. 
         """
 
         response = client.chat.completions.create(
             model="gpt-3.5-turbo",
             messages=[
-                {"role": "system", "content": "You are a helpful assistant."},
+                {"role": "system", "content": "You are a thoughtful, faith-centered interviewer guiding life stories."},
                 {"role": "user", "content": prompt}
             ],
             max_tokens=500
@@ -44,7 +44,7 @@ def generate_questions(story_summary):
         return questions
 
     except Exception as e:
-        logging.error(f"Error generating questions from OpenAI: {e}", exc_info=True)
+        logging.error(f"Error generating questions: {e}", exc_info=True)
         return [
             "We encountered an error creating your personalized questions. Please try again later.",
             "If the problem persists, contact the project team for assistance.",
@@ -58,34 +58,39 @@ def generate_story(story_summary, responses):
         responses_text = "\n".join([f"{i+1}. {response}" for i, response in enumerate(responses)])
 
         prompt = f"""
-        Please combine the following story summary and participant responses into a complete personal story. Use the following structure:
+        Transform the following story summary and participant responses into a **detailed, immersive, and engaging LDS faith-centered narrative** of at least **1500-2000 words**.
 
-        1. Initial Challenge or Need
-        2. Demonstration of Faith
-        3. Unexpected or Divine Preparation
-        4. Miraculous Resolution
-        5. Lasting Impact
+        Follow this structure:
+        1. **An Initial Challenge or Need** - Describe the hardship or need that set the stage for this experience.
+        2. **A Demonstration of Faith** - Show how the storyteller exercised faith, trust, or obedience in God.
+        3. **Unexpected or Divine Preparation** - Reveal any prior events or experiences that, in hindsight, prepared them for this moment.
+        4. **A Miraculous Resolution** - Describe how the situation was resolved, highlighting any divine intervention or spiritual insight.
+        5. **A Lasting Impact** - Conclude with how this experience strengthened their faith and shaped their understanding of God’s role in their life.
+
+        Please **write in an engaging, personal, and emotionally resonant style**, capturing the storyteller's authentic voice.
+        Expand historical and cultural details to **enrich the setting and context**.
+        Include **natural-sounding dialogue** where appropriate to enhance realism.
 
         Story Summary: 
         {story_summary}
-
+        
         Participant Responses:
         {responses_text}
-
-        Create a warm, personal, narrative-style story with a reflective tone. Use the participant's own voice where possible.
+        
+        Please generate a warm, reflective, engaging personal story that emphasizes faith and divine presence in life’s moments.
         """
 
         response = client.chat.completions.create(
             model="gpt-3.5-turbo",
             messages=[
-                {"role": "system", "content": "You are a helpful assistant."},
+                {"role": "system", "content": "You are a faith-centered storyteller transforming life experiences into compelling narratives."},
                 {"role": "user", "content": prompt}
             ],
-            max_tokens=1500
+            max_tokens=4000
         )
 
         return response.choices[0].message.content.strip()
 
     except Exception as e:
-        logging.error(f"Error generating story from OpenAI: {e}", exc_info=True)
+        logging.error(f"Error generating story: {e}", exc_info=True)
         return "We're sorry — we encountered an error while creating your story. Please contact the project team for assistance."
