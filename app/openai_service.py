@@ -58,32 +58,37 @@ def generate_story(story_summary, responses):
         responses_text = "\n".join([f"{i+1}. {response}" for i, response in enumerate(responses)])
 
         prompt = f"""
-        Transform the following story summary and participant responses into a **detailed, immersive, and engaging LDS faith-centered narrative** of at least **1500-2000 words**.
-
-        Follow this structure:
-        1. **An Initial Challenge or Need** - Describe the hardship or need that set the stage for this experience.
-        2. **A Demonstration of Faith** - Show how the storyteller exercised faith, trust, or obedience in God.
-        3. **Unexpected or Divine Preparation** - Reveal any prior events or experiences that, in hindsight, prepared them for this moment.
-        4. **A Miraculous Resolution** - Describe how the situation was resolved, highlighting any divine intervention or spiritual insight.
-        5. **A Lasting Impact** - Conclude with how this experience strengthened their faith and shaped their understanding of God’s role in their life.
-
-        Please **write in an engaging, personal, and emotionally resonant style**, capturing the storyteller's authentic voice.
-        Expand historical and cultural details to **enrich the setting and context**.
-        Include **natural-sounding dialogue** where appropriate to enhance realism.
-
+        You are a skilled LDS storyteller dedicated to preserving personal history with authenticity and emotional depth.
+        
+        Transform the following story summary and participant responses into a **deeply personal, immersive, and engaging LDS faith-centered narrative** in the **first-person perspective**. Ensure the final story is **at least 1500-2000 words** and feels like a **real, lived memory**, not a formal retelling.
+        
+        Follow this natural storytelling structure:
+        1. **An Initial Challenge or Need** - Establish the setting, capturing the emotions, fears, or uncertainties the storyteller faced.
+        2. **A Demonstration of Faith** - Show how the storyteller exercised faith, trust, or obedience in God, using **realistic dialogue and internal reflections**.
+        3. **Unexpected or Divine Preparation** - Reveal any prior events, teachings, or experiences that, in hindsight, prepared them for this moment.
+        4. **A Miraculous Resolution** - Describe how the situation was resolved, highlighting **small but powerful moments of divine intervention or realization**.
+        5. **A Lasting Impact** - Conclude with how this experience strengthened their faith, changed their perspective, or influenced future decisions.
+        
+        **Key Requirements:**
+        - **Write in a natural, conversational, and emotionally resonant style.**
+        - **Ensure the storyteller's voice feels authentic**—as if they are telling the story themselves.
+        - **Expand historical and cultural details** where appropriate to enrich the setting and context.
+        - **Avoid summarizing lessons explicitly**—let them emerge naturally through actions and realizations.
+        - **Use realistic dialogue** to enhance immersion and authenticity.
+        
         Story Summary: 
         {story_summary}
         
         Participant Responses:
         {responses_text}
         
-        Please generate a warm, reflective, engaging personal story that emphasizes faith and divine presence in life’s moments.
+        Please generate a warm, reflective, and engaging personal story that captures **the subtle yet profound ways faith operates in everyday life**.
         """
 
         response = client.chat.completions.create(
             model="gpt-3.5-turbo",
             messages=[
-                {"role": "system", "content": "You are a faith-centered storyteller transforming life experiences into compelling narratives."},
+                {"role": "system", "content": "You are a faith-centered storyteller transforming life experiences into compelling first-person narratives."},
                 {"role": "user", "content": prompt}
             ],
             max_tokens=4000
