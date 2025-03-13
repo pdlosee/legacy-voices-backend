@@ -75,6 +75,9 @@ def generate_story(story_summary, responses):
         - **Expand historical and cultural details** where appropriate to enrich the setting and context.
         - **Avoid summarizing lessons explicitly**—let them emerge naturally through actions and realizations.
         - **Use natural conversation dialogue between the characters in the story.** to enhance immersion and authenticity.
+        - **A minimum of 35% of the story words will reflect conversation between story characters.** to add credability.
+        - **Add a humor tone where appropriate in the story** to enhance reader engagement
+        - **Story length goal is a minimum of 2000 words** expand with historical detail if story content is minimal
         
         Story Summary: 
         {story_summary}
