@@ -74,7 +74,7 @@ def generate_story(story_summary, responses):
         - **Ensure the storyteller's voice feels authentic**—as if they are telling the story themselves.
         - **Expand historical and cultural details** where appropriate to enrich the setting and context.
         - **Avoid summarizing lessons explicitly**—let them emerge naturally through actions and realizations.
-        - **Use realistic dialogue** to enhance immersion and authenticity.
+        - **Use natural conversation dialogue between the characters in the story.** to enhance immersion and authenticity.
         
         Story Summary: 
         {story_summary}
