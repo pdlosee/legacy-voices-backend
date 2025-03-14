@@ -13,26 +13,26 @@ def generate_questions(story_summary):
         prompt = f"""
         You are an LDS biographical interviewer helping users tell their life stories through faith-centered reflection. 
         Read the following story summary and generate 5 follow-up questions following this structure:
-        
+
         1. Initial Challenge or Need
         2. Demonstration of Faith
         3. Unexpected or Divine Preparation
         4. Miraculous Resolution
-        5. Lasting Impact
-        
-        Story Summary: 
+        5. A Lasting Impact
+
+        Story Summary:
         {story_summary}
-        
-        Please generate exactly 5 questions that help deepen the user's reflection and faith-based insights. 
+
+        Please generate exactly 5 questions that help deepen the user's reflection and faith-based insights.
         """
 
         response = client.chat.completions.create(
-            model="gpt-4-turbo",  # ✅ Upgraded to GPT-4 Turbo
+            model="gpt-4-turbo",
             messages=[
                 {"role": "system", "content": "You are a thoughtful, faith-centered interviewer guiding life stories."},
                 {"role": "user", "content": prompt}
             ],
-            max_tokens=750  # Increased for richer, more contextual questions
+            max_tokens=750
         )
 
         content = response.choices[0].message.content.strip()
@@ -59,28 +59,16 @@ def generate_story(story_summary, responses):
 
         prompt = f"""
         You are a skilled LDS storyteller dedicated to preserving personal history with authenticity and emotional depth.
-        
-        Transform the following story summary and participant responses into a **deeply personal, immersive, and engaging LDS faith-centered narrative** in the **first-person perspective**. Ensure the final story is **at least 2000 words** and feels like a **real, lived memory**, not a formal retelling.
-        
-        ### **Story Structure (Guide Only)**
-        1. **An Initial Challenge or Need** - Establish the setting, capturing the emotions, fears, or uncertainties the storyteller faced.
-        2. **A Demonstration of Faith** - Show how the storyteller exercised faith, trust, or obedience in God, using **realistic dialogue and internal reflections**.
-        3. **Unexpected or Divine Preparation** - Reveal any prior events, teachings, or experiences that, in hindsight, prepared them for this moment.
-        4. **A Miraculous Resolution** - Describe how the situation was resolved, highlighting **small but powerful moments of divine intervention or realization**.
-        5. **A Lasting Impact** - Conclude with how this experience strengthened their faith, changed their perspective, or influenced future decisions.
+        Transform the following story summary and participant responses into a **deeply personal, immersive, and engaging LDS faith-centered narrative** in the **first-person perspective**.
 
-        ### **Key Storytelling Requirements**
-        - **Write in a natural, conversational, and emotionally resonant style.**
-        - **Ensure the storyteller's voice feels authentic**—as if they are telling the story themselves.
-        - **Expand historical and cultural details** where appropriate to enrich the setting and context.
-        - **Avoid summarizing lessons explicitly**—let them emerge naturally through actions and realizations.
-        - **Use natural conversation dialogue between the characters in the story** to enhance immersion and authenticity.
-        - **A minimum of 35% of the story words must be dialogue between story characters** to add credibility.
-        - **Add humor where appropriate** to enhance reader engagement and make the story feel real.
-        - **Ensure characters react naturally** to events, showing hesitation, internal thoughts, and interpersonal dynamics.
-        - **Expand with historical and cultural details** if the story content is minimal to reach the 2000-word goal.
+        ### Story Structure:
+        1. **An Initial Challenge or Need** - Establish the setting, emotions, and obstacles.
+        2. **A Demonstration of Faith** - Show how faith, trust, or obedience played a role.
+        3. **Unexpected or Divine Preparation** - Reveal any prior experiences that prepared the person for this moment.
+        4. **A Miraculous Resolution** - Describe the outcome, highlighting divine intervention.
+        5. **A Lasting Impact** - Conclude with how the experience shaped faith and perspective.
 
-        **Story Summary:** 
+        **Story Summary:**
         {story_summary}
 
         **Participant Responses:**
@@ -90,12 +78,12 @@ def generate_story(story_summary, responses):
         """
 
         response = client.chat.completions.create(
-            model="gpt-4-turbo",  # ✅ Upgraded to GPT-4 Turbo
+            model="gpt-4-turbo",
             messages=[
                 {"role": "system", "content": "You are a faith-centered storyteller transforming life experiences into compelling first-person narratives."},
                 {"role": "user", "content": prompt}
             ],
-            max_tokens=4096  # ✅ Allows full-length detailed storytelling
+            max_tokens=4096
         )
 
         return response.choices[0].message.content.strip()
@@ -103,3 +91,37 @@ def generate_story(story_summary, responses):
     except Exception as e:
         logging.error(f"Error generating story: {e}", exc_info=True)
         return "We're sorry — we encountered an error while creating your story. Please contact the project team for assistance."
+
+def revise_story(original_story, dialogue, history, humor, length, moral, custom_note):
+    try:
+        revision_prompt = f"""
+        Revise the following LDS-themed personal story based on the user’s requested changes.
+
+        - Adjust the **amount of natural conversation** (0-10 scale): {dialogue}/10.
+        - Adjust **historical & cultural details** (0-10 scale): {history}/10.
+        - Adjust **humor** (0-10 scale): {humor}/10.
+        - Adjust **story length** (0-10 scale): {length}/10.
+        - Adjust **moral lesson emphasis** (0-10 scale): {moral}/10.
+
+        Additional user notes: {custom_note}
+
+        **Revise the story accordingly while maintaining narrative coherence and emotional depth.**
+
+        Original Story:
+        {original_story}
+        """
+
+        response = client.chat.completions.create(
+            model="gpt-4-turbo",
+            messages=[
+                {"role": "system", "content": "You are an expert storyteller and editor, refining personal narratives."},
+                {"role": "user", "content": revision_prompt}
+            ],
+            max_tokens=4096
+        )
+
+        return response.choices[0].message.content.strip()
+
+    except Exception as e:
+        logging.error(f"Error revising story: {e}", exc_info=True)
+        return "We're sorry — an error occurred while revising your story."
