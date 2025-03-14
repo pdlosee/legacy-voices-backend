@@ -60,31 +60,32 @@ def generate_story(story_summary, responses):
         prompt = f"""
         You are a skilled LDS storyteller dedicated to preserving personal history with authenticity and emotional depth.
         
-        Transform the following story summary and participant responses into a **deeply personal, immersive, and engaging LDS faith-centered narrative** in the **first-person perspective**. Ensure the final story is **at least 1500-2000 words** and feels like a **real, lived memory**, not a formal retelling.
+        Transform the following story summary and participant responses into a **deeply personal, immersive, and engaging LDS faith-centered narrative** in the **first-person perspective**. Ensure the final story is **at least 2000 words** and feels like a **real, lived memory**, not a formal retelling.
         
-        Follow this natural storytelling structure:
+        ### **Story Structure (Guide Only)**
         1. **An Initial Challenge or Need** - Establish the setting, capturing the emotions, fears, or uncertainties the storyteller faced.
         2. **A Demonstration of Faith** - Show how the storyteller exercised faith, trust, or obedience in God, using **realistic dialogue and internal reflections**.
         3. **Unexpected or Divine Preparation** - Reveal any prior events, teachings, or experiences that, in hindsight, prepared them for this moment.
         4. **A Miraculous Resolution** - Describe how the situation was resolved, highlighting **small but powerful moments of divine intervention or realization**.
         5. **A Lasting Impact** - Conclude with how this experience strengthened their faith, changed their perspective, or influenced future decisions.
-        
-        **Key Requirements:**
+
+        ### **Key Storytelling Requirements**
         - **Write in a natural, conversational, and emotionally resonant style.**
         - **Ensure the storyteller's voice feels authentic**—as if they are telling the story themselves.
         - **Expand historical and cultural details** where appropriate to enrich the setting and context.
         - **Avoid summarizing lessons explicitly**—let them emerge naturally through actions and realizations.
-        - **Use natural conversation dialogue between the characters in the story.** to enhance immersion and authenticity.
-        - **A minimum of 35% of the story words will reflect conversation between story characters.** to add credability.
-        - **Add a humor tone where appropriate in the story** to enhance reader engagement
-        - **Story length goal is a minimum of 2000 words** expand with historical detail if story content is minimal
-        
-        Story Summary: 
+        - **Use natural conversation dialogue between the characters in the story** to enhance immersion and authenticity.
+        - **A minimum of 35% of the story words must be dialogue between story characters** to add credibility.
+        - **Add humor where appropriate** to enhance reader engagement and make the story feel real.
+        - **Ensure characters react naturally** to events, showing hesitation, internal thoughts, and interpersonal dynamics.
+        - **Expand with historical and cultural details** if the story content is minimal to reach the 2000-word goal.
+
+        **Story Summary:** 
         {story_summary}
-        
-        Participant Responses:
+
+        **Participant Responses:**
         {responses_text}
-        
+
         Please generate a warm, reflective, and engaging personal story that captures **the subtle yet profound ways faith operates in everyday life**.
         """
 
