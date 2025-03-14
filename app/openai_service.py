@@ -27,12 +27,12 @@ def generate_questions(story_summary):
         """
 
         response = client.chat.completions.create(
-            model="gpt-3.5-turbo",
+            model="gpt-4-turbo",  # ✅ Upgraded to GPT-4 Turbo
             messages=[
                 {"role": "system", "content": "You are a thoughtful, faith-centered interviewer guiding life stories."},
                 {"role": "user", "content": prompt}
             ],
-            max_tokens=500
+            max_tokens=750  # Increased for richer, more contextual questions
         )
 
         content = response.choices[0].message.content.strip()
@@ -90,12 +90,12 @@ def generate_story(story_summary, responses):
         """
 
         response = client.chat.completions.create(
-            model="gpt-3.5-turbo",
+            model="gpt-4-turbo",  # ✅ Upgraded to GPT-4 Turbo
             messages=[
                 {"role": "system", "content": "You are a faith-centered storyteller transforming life experiences into compelling first-person narratives."},
                 {"role": "user", "content": prompt}
             ],
-            max_tokens=4096
+            max_tokens=4096  # ✅ Allows full-length detailed storytelling
         )
 
         return response.choices[0].message.content.strip()
