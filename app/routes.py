@@ -1,18 +1,55 @@
-import sys
-import os
-
-sys.path.append(os.path.abspath(os.path.dirname(__file__)))  # Ensure `app/` is in the path
-
-from app.db import get_db  # Import after modifying sys.path
 from flask import Blueprint, request, jsonify
-from db import get_db
-from app.openai_service import analyze_stories_for_profile_update
+from flask_cors import cross_origin
+from app.db import get_db
+from app.openai_service import generate_questions, generate_story, analyze_stories_for_profile_update
 
 bp = Blueprint('routes', __name__)
 
-@bp.route('/update-character-profile', methods=['POST'])
+# ✅ Handle CORS Preflight Requests Properly
+@bp.route('/generate-questions', methods=['OPTIONS', 'POST'])
+@cross_origin()
+def generate_questions_endpoint():
+    if request.method == 'OPTIONS':
+        return jsonify({"message": "Preflight request allowed"}), 200
+    
+    data = request.json
+    story_summary = data.get('storySummary', '')
+
+    if not story_summary:
+        return jsonify({'error': 'Story summary is required'}), 400
+
+    questions = generate_questions(story_summary)
+    return jsonify({'questions': questions})
+
+
+# ✅ Generate Story from User Responses
+@bp.route('/generate-story', methods=['OPTIONS', 'POST'])
+@cross_origin()
+def generate_story_endpoint():
+    if request.method == 'OPTIONS':
+        return jsonify({"message": "Preflight request allowed"}), 200
+
+    data = request.json
+    story_summary = data.get('storySummary', '')
+    responses = data.get('responses', [])
+
+    if not story_summary or len(responses) != 5:
+        return jsonify({'error': 'Story summary and exactly 5 responses required'}), 400
+
+    try:
+        final_story = generate_story(story_summary, responses)
+        return jsonify({'finalStory': final_story})
+    except Exception as e:
+        return jsonify({'error': f'Error generating story: {str(e)}'}), 500
+
+
+# ✅ Update Character Profile Based on User Stories
+@bp.route('/update-character-profile', methods=['OPTIONS', 'POST'])
+@cross_origin()
 def update_character_profile():
-    """User-triggered character profile refinement based on new stories."""
+    if request.method == 'OPTIONS':
+        return jsonify({"message": "Preflight request allowed"}), 200
+
     data = request.json
     user_id = data.get("user_id")
 
@@ -26,9 +63,14 @@ def update_character_profile():
 
     return jsonify({"message": "Suggested profile update available.", "profile_update": suggested_update})
 
-@bp.route('/accept-profile-update', methods=['POST'])
+
+# ✅ Accept and Save Updated Character Profile
+@bp.route('/accept-profile-update', methods=['OPTIONS', 'POST'])
+@cross_origin()
 def accept_profile_update():
-    """User-approved character profile update."""
+    if request.method == 'OPTIONS':
+        return jsonify({"message": "Preflight request allowed"}), 200
+
     data = request.json
     user_id = data.get("user_id")
     new_profile = data.get("new_profile")
