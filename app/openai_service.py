@@ -1,3 +1,9 @@
+import sys
+import os
+
+sys.path.append(os.path.abspath(os.path.dirname(__file__)))  # Ensure `app/` is in the path
+
+from app.db import get_db  # Import after modifying sys.path
 import openai
 from db import get_db
 
