@@ -1,16 +1,14 @@
 from flask import Blueprint, request, jsonify
 from flask_cors import cross_origin
-from app.db import get_db
-from app.openai_service import generate_questions, generate_story, analyze_stories_for_profile_update
+from app.openai_service import generate_questions
 
 bp = Blueprint('routes', __name__)
 
-# ✅ Handle CORS Preflight Requests Properly
-@bp.route('/generate-questions', methods=['OPTIONS', 'POST'])
+@bp.route('/generate-questions', methods=['POST', 'OPTIONS'])
 @cross_origin()
 def generate_questions_endpoint():
     if request.method == 'OPTIONS':
-        return jsonify({"message": "Preflight request allowed"}), 200
+        return jsonify({"message": "Preflight request allowed"}), 200  # ✅ Handles CORS Preflight Request
     
     data = request.json
     story_summary = data.get('storySummary', '')
@@ -20,6 +18,7 @@ def generate_questions_endpoint():
 
     questions = generate_questions(story_summary)
     return jsonify({'questions': questions})
+
 
 
 # ✅ Generate Story from User Responses
