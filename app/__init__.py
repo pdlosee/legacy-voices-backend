@@ -4,12 +4,12 @@ from flask_cors import CORS
 def create_app():
     app = Flask(__name__)
 
-    # ✅ Fix: Explicitly Allow Netlify Requests
+    # ✅ Explicitly allow Netlify AND localhost
     CORS(app, resources={r"/*": {
         "origins": [
             "https://your-personal-history.netlify.app",
-            "http://localhost:3000",
-            "http://127.0.0.1:5000"
+            "http://127.0.0.1:5000",
+            "http://localhost:3000"
         ],
         "allow_headers": ["Content-Type", "Authorization"],
         "methods": ["GET", "POST", "OPTIONS"]
@@ -19,4 +19,3 @@ def create_app():
     app.register_blueprint(routes_bp)
 
     return app
-
