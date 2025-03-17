@@ -36,7 +36,8 @@ def generate_questions(story_summary):
         )
 
         content = response.choices[0].message.content.strip()
-        questions = [q.strip() for q in content.split('\n') if q.strip()]
+        questions = [q.strip() for q in content.split('\n') if q.strip() and q[0].isdigit()]
+        questions = questions[:5]  # ✅ Force only the first 5 questions
 
         if len(questions) != 5:
             raise ValueError(f"Expected 5 questions, got {len(questions)} - Response content: {content}")
