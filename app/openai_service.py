@@ -84,7 +84,7 @@ def generate_story(story_summary, responses):
                 {"role": "system", "content": "You are a faith-centered storyteller transforming life experiences into compelling first-person narratives."},
                 {"role": "user", "content": prompt}
             ],
-            max_tokens=4096
+            max_tokens=6000
         )
 
         return response.choices[0].message.content.strip()
