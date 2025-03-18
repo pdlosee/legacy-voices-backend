@@ -118,7 +118,7 @@ def revise_story(original_story, dialogue, history, humor, length, moral, custom
                 {"role": "system", "content": "You are an expert storyteller and editor, refining personal narratives."},
                 {"role": "user", "content": revision_prompt}
             ],
-            max_tokens=4096
+            max_tokens=6000
         )
 
         return response.choices[0].message.content.strip()
