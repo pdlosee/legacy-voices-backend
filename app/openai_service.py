@@ -14,10 +14,10 @@ def generate_questions(story_summary):
         You are an LDS biographical interviewer helping users tell their life stories through faith-centered reflection. 
         Read the following story summary and generate 5 follow-up questions following this structure:
 
-        1. Initial Challenge or Need
-        2. Demonstration of Faith
-        3. Unexpected or Divine Preparation
-        4. Miraculous Resolution
+        1. Initial Challenge or unexpected need
+        2. The requirements of increased faith and preparation
+        3. Details in the journey of faith and works to meet the challenge
+        4. The resolution and results
         5. A Lasting Impact
 
         Story Summary:
@@ -63,10 +63,10 @@ def generate_story(story_summary, responses):
         Transform the following story summary and participant responses into a **deeply personal, immersive, and engaging LDS faith-centered narrative** in the **first-person perspective**.
 
         ### Story Structure:
-        1. **An Initial Challenge or Need** - Establish the setting, emotions, and obstacles.
-        2. **A Demonstration of Faith** - Show how faith, trust, or obedience played a role.
-        3. **Unexpected or Divine Preparation** - Reveal any prior experiences that prepared the person for this moment.
-        4. **A Miraculous Resolution** - Describe the outcome, highlighting divine intervention.
+        1. **Initial Challenge or unexpected need** - Establish the setting, emotions, and obstacles.
+        2. **The requirements of increased faith and preparation** - Show how faith, trust, or obedience played a role.
+        3. **Details in the journey of faith and works to meet the challenge** - Reveal any prior experiences that prepared the person for this moment.
+        4. **The resolution and results** - Describe the outcome, highlighting divine intervention.
         5. **A Lasting Impact** - Conclude with how the experience shaped faith and perspective.
 
         **Story Summary:**
@@ -84,7 +84,8 @@ def generate_story(story_summary, responses):
                 {"role": "system", "content": "You are a faith-centered storyteller transforming life experiences into compelling first-person narratives."},
                 {"role": "user", "content": prompt}
             ],
-            max_tokens=4096
+            max_tokens=4096,
+            stop=None  # ✅ Ensures AI doesn't artificially stop early
         )
 
         return response.choices[0].message.content.strip()
@@ -103,6 +104,7 @@ def revise_story(original_story, dialogue, history, humor, length, moral, custom
         - Adjust **humor** (0-10 scale): {humor}/10.
         - Adjust **story length** (0-10 scale): {length}/10.
         - Adjust **moral lesson emphasis** (0-10 scale): {moral}/10.
+        - You must generate a story of at least 2000 words
 
         Additional user notes: {custom_note}
 
@@ -118,7 +120,8 @@ def revise_story(original_story, dialogue, history, humor, length, moral, custom
                 {"role": "system", "content": "You are an expert storyteller and editor, refining personal narratives."},
                 {"role": "user", "content": revision_prompt}
             ],
-            max_tokens=4096
+            max_tokens=4096,
+            stop=None  # ✅ Ensures AI doesn't artificially stop early
         )
 
         return response.choices[0].message.content.strip()
